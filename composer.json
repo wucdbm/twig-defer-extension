@@ -1,0 +1,22 @@
+{
+    "name": "wucdbm/twig-defer-extension",
+    "type": "library",
+    "description": "Defer rendering of TWIG template pieces",
+    "keywords": ["templating", "twig"],
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Martin Kirilov",
+            "email": "wucdbm@gmail.com",
+            "role": "Lead Developer"
+        }
+    ],
+    "require": {
+        "php": "~5.5|~7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wucdbm\\Extension\\Twig\\": ""
+        }
+    }
+}
