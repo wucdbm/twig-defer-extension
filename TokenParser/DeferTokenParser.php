@@ -2,19 +2,20 @@
 
 namespace Wucdbm\Extension\Twig\TokenParser;
 
+use Wucdbm\Extension\Twig\Extension\DeferExtension;
 use Wucdbm\Extension\Twig\Node\DeferNode;
 
 class DeferTokenParser extends \Twig_TokenParser {
 
     public function parse(\Twig_Token $token) {
-        $lineno = $token->getLine();
+        $line = $token->getLine();
         $parser = $this->parser;
         $stream = $parser->getStream();
 
         if ($stream->test(\Twig_Token::NAME_TYPE)) {
             $name = $stream->expect(\Twig_Token::NAME_TYPE)->getValue();
         } else {
-            $name = '_default';
+            $name = DeferExtension::NAME_DEFAULT;
         }
 
         if ($stream->nextIf(\Twig_Token::BLOCK_END_TYPE)) {
@@ -32,11 +33,10 @@ class DeferTokenParser extends \Twig_TokenParser {
 
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        return new DeferNode($name, $body, $lineno, $this->getTag());
+        return new DeferNode($name, $body, $line, $this->getTag());
     }
 
-    public function decideBlockEnd(\Twig_Token $token)
-    {
+    public function decideBlockEnd(\Twig_Token $token) {
         return $token->test('enddefer');
     }
 

@@ -7,6 +7,8 @@ use Wucdbm\Extension\Twig\TokenParser\DeferTokenParser;
 
 class DeferExtension extends \Twig_Extension {
 
+    const NAME_DEFAULT = '_default';
+
     protected $cache = [];
 
     public function defer($key, $value) {

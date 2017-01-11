@@ -2,6 +2,7 @@
 
 namespace Wucdbm\Extension\Twig\TokenParser;
 
+use Wucdbm\Extension\Twig\Extension\DeferExtension;
 use Wucdbm\Extension\Twig\Node\DeferredNode;
 
 class DeferredTokenParser extends \Twig_TokenParser {
@@ -13,7 +14,7 @@ class DeferredTokenParser extends \Twig_TokenParser {
         if ($stream->test(\Twig_Token::NAME_TYPE)) {
             $name = $stream->expect(\Twig_Token::NAME_TYPE)->getValue();
         } else {
-            $name = '_default';
+            $name = DeferExtension::NAME_DEFAULT;
         }
 
         $default = null;
