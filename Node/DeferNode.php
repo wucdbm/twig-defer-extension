@@ -2,6 +2,8 @@
 
 namespace Wucdbm\Extension\Twig\Node;
 
+use Wucdbm\Extension\Twig\Extension\DeferExtension;
+
 class DeferNode extends \Twig_Node {
 
     protected $value;
@@ -15,7 +17,7 @@ class DeferNode extends \Twig_Node {
         if ($this->value instanceof \Twig_Node_Expression) {
             $compiler
                 ->addDebugInfo($this)
-                ->write('$this->env->getExtension(\'defer\')->defer(')
+                ->write(sprintf('$this->env->getExtension(\'%s\')->defer(', DeferExtension::class))
                 ->string($this->getAttribute('name'))
                 ->raw(', ')
                 ->subcompile($this->getNode('value'))
@@ -24,30 +26,30 @@ class DeferNode extends \Twig_Node {
             // This is very ugly, but I don't know how else to handle \Twig_Node that compiles into this: echo "constant expression";
             $compiler
                 ->write("\$deferred = function() use (\$context, \$blocks) {")
-                    ->indent()
-                        ->write("ob_start();\n")
-                        ->write("try {\n")
-                            ->indent()
-                                ->subcompile($this->getNode('value'))
-                                ->write("return ob_get_clean();")
-                            ->outdent()
-                        ->write("} catch (Exception \$e) {\n")
-                            ->indent()
-                                ->write("ob_end_clean();\n\n")
-                                ->write("throw \$e;\n")
-                            ->outdent()
-                        ->write("} catch (Throwable \$e) {\n")
-                            ->indent()
-                                ->write("ob_end_clean();\n\n")
-                                ->write("throw \$e;\n")
-                            ->outdent()
-                        ->write("}\n\n")
-                    ->outdent()
+                ->indent()
+                ->write("ob_start();\n")
+                ->write("try {\n")
+                ->indent()
+                ->subcompile($this->getNode('value'))
+                ->write("return ob_get_clean();")
+                ->outdent()
+                ->write("} catch (Exception \$e) {\n")
+                ->indent()
+                ->write("ob_end_clean();\n\n")
+                ->write("throw \$e;\n")
+                ->outdent()
+                ->write("} catch (Throwable \$e) {\n")
+                ->indent()
+                ->write("ob_end_clean();\n\n")
+                ->write("throw \$e;\n")
+                ->outdent()
+                ->write("}\n\n")
+                ->outdent()
                 ->write("};");
 
             $compiler
                 ->addDebugInfo($this)
-                ->write('$this->env->getExtension(\'defer\')->defer(')
+                ->write(sprintf('$this->env->getExtension(\'%s\')->defer(', DeferExtension::class))
                 ->string($this->getAttribute('name'))
                 ->raw(', ')
                 ->write("\$deferred()")
