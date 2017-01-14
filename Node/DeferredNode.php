@@ -7,12 +7,17 @@ use Wucdbm\Extension\Twig\Extension\DeferExtension;
 class DeferredNode extends \Twig_Node {
 
     public function __construct($name, \Twig_Node_Expression $value = null, $line, $tag = null) {
-        parent::__construct(array('default' => $value), array('name' => $name), $line, $tag);
-        ;
+        $nodes = [];
+
+        if ($value) {
+            $nodes['name'] = $value;
+        }
+
+        parent::__construct($nodes, array('name' => $name), $line, $tag);
     }
 
     public function compile(\Twig_Compiler $compiler) {
-        if ($this->getNode('default')) {
+        if ($this->hasNode('name')) {
             $compiler
                 ->addDebugInfo($this)
                 ->write(sprintf('echo $this->env->getExtension(\'%s\')->has(', DeferExtension::class))
@@ -21,7 +26,7 @@ class DeferredNode extends \Twig_Node {
                 ->write(sprintf('$this->env->getExtension(\'%s\')->flush(', DeferExtension::class))
                 ->string($this->getAttribute('name'))
                 ->raw(") : ")
-                ->subcompile($this->getNode('default'))
+                ->subcompile($this->getNode('name'))
                 ->raw(";\n");
         } else {
             $compiler

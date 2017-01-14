@@ -18,6 +18,7 @@ class DeferredTokenParser extends \Twig_TokenParser {
         }
 
         $default = null;
+
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             $default = $parser->getExpressionParser()->parseExpression();
         }
