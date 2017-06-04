@@ -22,13 +22,9 @@ class DeferExtension extends \Twig_Extension {
         }
     }
 
-    public function flush($key) {
+    public function flush($key, $default = null) {
         if (!$this->has($key)) {
-            if ($this->strict) {
-                throw new \Exception(sprintf('Nothing is deferred for key %s', $key));
-            }
-
-            return '';
+            return $default;
         }
 
         $data = $this->cache[$key];
@@ -50,7 +46,7 @@ class DeferExtension extends \Twig_Extension {
 
     public function getFilters() {
         return [
-            new \Twig_SimpleFilter('deferred', [$this, 'deferred'])
+            new \Twig_SimpleFilter('deferred', [$this, 'flush'])
         ];
     }
 
@@ -70,14 +66,6 @@ class DeferExtension extends \Twig_Extension {
         }
 
         return $found;
-    }
-
-    public function deferred(string $key, $default = null) {
-        if (!$this->has($key) && $default) {
-            return $default;
-        }
-
-        return $this->flush($key);
     }
 
     public function getTokenParsers() {
