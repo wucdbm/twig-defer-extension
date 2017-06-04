@@ -4,6 +4,7 @@ namespace Wucdbm\Extension\Twig\TokenParser;
 
 use Wucdbm\Extension\Twig\Extension\DeferExtension;
 use Wucdbm\Extension\Twig\Node\DeferNode;
+use Wucdbm\Extension\Twig\Node\PlainTextNode;
 
 class DeferTokenParser extends \Twig_TokenParser {
 
@@ -12,10 +13,14 @@ class DeferTokenParser extends \Twig_TokenParser {
         $parser = $this->parser;
         $stream = $parser->getStream();
 
-        if ($stream->test(\Twig_Token::NAME_TYPE)) {
-            $name = $stream->expect(\Twig_Token::NAME_TYPE)->getValue();
+        if ($stream->test(\Twig_Token::STRING_TYPE)) {
+            $expected = $stream->expect(\Twig_Token::STRING_TYPE);
+            $name = $expected->getValue();
+            $nameNode = new PlainTextNode($name, $expected->getLine());
         } else {
-            $name = DeferExtension::NAME_DEFAULT;
+            $expected = $stream->expect(\Twig_Token::NAME_TYPE);
+            $name = $expected->getValue();
+            $nameNode = new \Twig_Node_Expression_Name($name, $expected->getLine());
         }
 
         if ($stream->nextIf(\Twig_Token::BLOCK_END_TYPE)) {
@@ -33,7 +38,7 @@ class DeferTokenParser extends \Twig_TokenParser {
 
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        return new DeferNode($name, $body, $line, $this->getTag());
+        return new DeferNode($nameNode, $body, $line, $this->getTag());
     }
 
     public function decideBlockEnd(\Twig_Token $token) {
