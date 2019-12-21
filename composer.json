@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "~7.0",
-		"twig/twig": "~2.0"
+		"twig/twig": "~2.7"
     },
     "autoload": {
         "psr-4": {

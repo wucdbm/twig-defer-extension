@@ -2,25 +2,27 @@
 
 namespace Wucdbm\Extension\Twig\Node;
 
+use Twig\Compiler;
+use Twig\Node\Expression\AbstractExpression;
+use Twig\Node\Node;
 use Wucdbm\Extension\Twig\Extension\DeferExtension;
 
-class DeferNode extends \Twig_Node {
+class DeferNode extends Node {
 
-    /** @var \Twig_Node */
+    /** @var Node */
     protected $keyNode;
 
-    /** @var \Twig_Node */
+    /** @var Node */
     protected $value;
 
-
-    public function __construct(\Twig_Node $keyNode, \Twig_Node $value, $line, $tag = null) {
+    public function __construct(Node $keyNode, Node $value, $line, $tag = null) {
         $this->keyNode = $keyNode;
         $this->value = $value;
         parent::__construct([], [], $line, $tag);
     }
 
-    public function compile(\Twig_Compiler $compiler) {
-        if ($this->value instanceof \Twig_Node_Expression) {
+    public function compile(Compiler $compiler) {
+        if ($this->value instanceof AbstractExpression) {
             $compiler
                 ->addDebugInfo($this)
                 ->write(sprintf('$this->env->getExtension(\'%s\')->defer(', DeferExtension::class))

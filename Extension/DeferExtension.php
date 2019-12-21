@@ -2,9 +2,10 @@
 
 namespace Wucdbm\Extension\Twig\Extension;
 
+use Twig\Extension\AbstractExtension;
 use Wucdbm\Extension\Twig\TokenParser\DeferTokenParser;
 
-class DeferExtension extends \Twig_Extension {
+class DeferExtension extends AbstractExtension {
 
     protected $strict;
 
