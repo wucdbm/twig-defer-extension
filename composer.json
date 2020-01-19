@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Wucdbm\\Extension\\Twig\\": ""
+            "Wucdbm\\Extension\\Twig\\": "src"
         }
     }
 }

@@ -3,6 +3,9 @@
 namespace Wucdbm\Extension\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use Twig\TwigTest;
 use Wucdbm\Extension\Twig\TokenParser\DeferTokenParser;
 
 class DeferExtension extends AbstractExtension {
@@ -41,13 +44,13 @@ class DeferExtension extends AbstractExtension {
 
     public function getFunctions() {
         return [
-            new \Twig_SimpleFunction('findDeferred', [$this, 'findDeferred'])
+            new TwigFunction('findDeferred', [$this, 'findDeferred'])
         ];
     }
 
     public function getFilters() {
         return [
-            new \Twig_SimpleFilter('deferred', [$this, 'flush'])
+            new TwigFilter('deferred', [$this, 'flush'])
         ];
     }
 
@@ -77,7 +80,7 @@ class DeferExtension extends AbstractExtension {
 
     public function getTests() {
         return [
-            new \Twig_SimpleTest('deferred', function ($key) {
+            new TwigTest('deferred', function ($key) {
                 return $this->has($key);
             })
         ];
